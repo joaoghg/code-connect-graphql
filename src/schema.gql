@@ -20,13 +20,15 @@ type AuthPayload {
 }
 
 type Channel {
+  id: String!
   name: String!
   description: String!
 }
 
 type Query {
   users: [User!]!
-  channel(id: Int!): Channel!
+  channels: [Channel!]!
+  channel(id: String!): Channel!
 }
 
 type Mutation {
@@ -34,7 +36,7 @@ type Mutation {
   signIn(credentials: SignInDto!): AuthPayload!
   createChannel(createChannelInput: CreateChannelInput!): Channel!
   updateChannel(updateChannelInput: UpdateChannelInput!): Channel!
-  removeChannel(id: Int!): Channel!
+  removeChannel(id: String!): Channel!
 }
 
 input CreateUserDto {
@@ -54,7 +56,7 @@ input CreateChannelInput {
 }
 
 input UpdateChannelInput {
-  name: String
-  description: String
-  id: Int!
+  name: String!
+  description: String!
+  id: String!
 }

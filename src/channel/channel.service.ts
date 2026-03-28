@@ -21,15 +21,25 @@ export class ChannelService {
     return this.prismaService.channel.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} channel`;
+  findOne(id: string) {
+    return this.prismaService.channel.findUnique({
+      where: { id }
+    });
   }
 
-  update(id: number, updateChannelInput: UpdateChannelInput) {
-    return `This action updates a #${id} channel`;
+  update(id: string, updateChannelInput: UpdateChannelInput) {
+    return this.prismaService.channel.update({
+      where: { id },
+      data: {
+        name: updateChannelInput.name,
+        description: updateChannelInput.description
+      }
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} channel`;
+  remove(id: string) {
+    return this.prismaService.channel.delete({
+      where: { id }
+    });
   }
 }

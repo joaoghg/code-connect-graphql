@@ -8,11 +8,11 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import type { JwtPayload } from 'src/auth/auth.types';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 
+@UseGuards(AuthGuard)
 @Resolver(() => Channel)
 export class ChannelResolver {
   constructor(private readonly channelService: ChannelService) {}
 
-  @UseGuards(AuthGuard)
   @Mutation(() => Channel)
   createChannel(
     @Args('createChannelInput') createChannelInput: CreateChannelInput,
@@ -21,13 +21,13 @@ export class ChannelResolver {
     return this.channelService.create(createChannelInput, user.sub);
   }
 
-  @Query(() => [Channel], { name: 'channel' })
-  findAll() {
+  @Query(() => [Channel])
+  channels() {
     return this.channelService.findAll();
   }
 
-  @Query(() => Channel, { name: 'channel' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  @Query(() => Channel)
+  channel(@Args('id') id: string) {
     return this.channelService.findOne(id);
   }
 
@@ -37,7 +37,7 @@ export class ChannelResolver {
   }
 
   @Mutation(() => Channel)
-  removeChannel(@Args('id', { type: () => Int }) id: number) {
+  removeChannel(@Args('id') id: string) {
     return this.channelService.remove(id);
   }
 }
