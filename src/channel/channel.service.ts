@@ -18,7 +18,7 @@ export class ChannelService {
   }
 
   findAll() {
-    return `This action returns all channel`;
+    return this.prismaService.channel.findMany();
   }
 
   findOne(id: number) {

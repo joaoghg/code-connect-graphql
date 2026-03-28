@@ -20,8 +20,8 @@ type AuthPayload {
 }
 
 type Channel {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  name: String!
+  description: String!
 }
 
 type Query {
