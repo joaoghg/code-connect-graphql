@@ -7,8 +7,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class ChannelService {
   constructor(private prismaService: PrismaService) {}
 
-  create(createChannelInput: CreateChannelInput, userId: string) {
-    return this.prismaService.channel.create({
+  async create(createChannelInput: CreateChannelInput, userId: string) {
+    return await this.prismaService.channel.create({
       data: {
         name: createChannelInput.name,
         description: createChannelInput.description,
@@ -17,18 +17,18 @@ export class ChannelService {
     });
   }
 
-  findAll() {
-    return this.prismaService.channel.findMany();
+  async findAll() {
+    return await this.prismaService.channel.findMany();
   }
 
-  findOne(id: string) {
-    return this.prismaService.channel.findUnique({
+  async findOne(id: string) {
+    return await this.prismaService.channel.findUnique({
       where: { id }
     });
   }
 
-  update(id: string, updateChannelInput: UpdateChannelInput) {
-    return this.prismaService.channel.update({
+  async update(id: string, updateChannelInput: UpdateChannelInput) {
+    return await this.prismaService.channel.update({
       where: { id },
       data: {
         name: updateChannelInput.name,
@@ -37,8 +37,8 @@ export class ChannelService {
     });
   }
 
-  remove(id: string) {
-    return this.prismaService.channel.delete({
+  async remove(id: string) {
+    return await this.prismaService.channel.delete({
       where: { id }
     });
   }

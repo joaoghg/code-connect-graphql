@@ -8,6 +8,7 @@ import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ChannelModule } from './channel/channel.module';
+import { VideoModule } from './video/video.module';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { ChannelModule } from './channel/channel.module';
       signOptions: { expiresIn: '1d' }
     }),
     AuthModule,
-    ChannelModule
+    ChannelModule,
+    VideoModule
   ],
   controllers: [],
   providers: []
