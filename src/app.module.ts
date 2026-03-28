@@ -7,6 +7,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+import { ChannelModule } from './channel/channel.module';
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { JwtModule } from '@nestjs/jwt';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1d' }
     }),
-    AuthModule
+    AuthModule,
+    ChannelModule
   ],
   controllers: [],
   providers: []

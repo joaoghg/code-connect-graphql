@@ -1,6 +1,6 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { AuthPayload } from './models/auth-payload.model';
-import { SignInDto } from './models/signin.dto';
+import { AuthPayload } from './entities/auth-payload.entity';
+import { SignInDto } from './dto/signin.dto';
 import { AuthService } from './auth.service';
 
 @Resolver()

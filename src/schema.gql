@@ -19,13 +19,22 @@ type AuthPayload {
   accessToken: String!
 }
 
+type Channel {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 type Query {
   users: [User!]!
+  channel(id: Int!): Channel!
 }
 
 type Mutation {
   createUser(user: CreateUserDto!): User!
   signIn(credentials: SignInDto!): AuthPayload!
+  createChannel(createChannelInput: CreateChannelInput!): Channel!
+  updateChannel(updateChannelInput: UpdateChannelInput!): Channel!
+  removeChannel(id: Int!): Channel!
 }
 
 input CreateUserDto {
@@ -37,4 +46,15 @@ input CreateUserDto {
 input SignInDto {
   email: String!
   password: String!
+}
+
+input CreateChannelInput {
+  name: String!
+  description: String!
+}
+
+input UpdateChannelInput {
+  name: String
+  description: String
+  id: Int!
 }
