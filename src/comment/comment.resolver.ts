@@ -1,25 +1,40 @@
-import { Resolver, Query, Mutation, Args, ResolveField, Parent } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+  Subscription
+} from '@nestjs/graphql';
 import { CommentService } from './comment.service';
 import { Comment } from './entities/comment.entity';
 import { CreateCommentInput } from './dto/create-comment.input';
-import { UseGuards } from '@nestjs/common';
+import { Inject, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { JwtPayload } from 'src/auth/auth.types';
 import { UpdateCommentInput } from './dto/update-comment.input';
 import { User } from 'src/user/entities/user.entity';
+import { PUB_SUB } from 'src/pubsub/pubsub.module';
+import { PubSub } from 'graphql-subscriptions';
 
 @UseGuards(AuthGuard)
 @Resolver(() => Comment)
 export class CommentResolver {
-  constructor(private readonly commentService: CommentService) {}
+  constructor(
+    private readonly commentService: CommentService,
+    @Inject(PUB_SUB) private readonly pubSub: PubSub
+  ) {}
 
   @Mutation(() => Comment)
-  createComment(
+  async createComment(
     @Args('createCommentInput') createCommentInput: CreateCommentInput,
     @CurrentUser() user: JwtPayload
   ) {
-    return this.commentService.create(createCommentInput, user);
+    const comment = await this.commentService.create(createCommentInput, user);
+    await this.pubSub.publish('commentCreated', { commentCreated: comment });
+    return comment;
   }
 
   @Query(() => [Comment])
@@ -45,5 +60,14 @@ export class CommentResolver {
   @ResolveField(() => User)
   user(@Parent() comment: Comment) {
     return this.commentService.getUser(comment.userId);
+  }
+
+  @Subscription(() => Comment, {
+    filter: (payload: { commentCreated: Comment }, variables: { videoId: string }) => {
+      return payload.commentCreated.videoId === variables.videoId;
+    }
+  })
+  commentCreated(@Args('videoId') videoId: string) {
+    return this.pubSub.asyncIterableIterator(`commentCreated:${videoId}`);
   }
 }

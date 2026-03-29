@@ -11,6 +11,7 @@ import { ChannelModule } from './channel/channel.module';
 import { VideoModule } from './video/video.module';
 import { SupabaseModule } from './supabase/supabase.module';
 import { CommentModule } from './comment/comment.module';
+import { PubsubModule } from './pubsub/pubsub.module';
 
 @Module({
   imports: [
@@ -21,7 +22,10 @@ import { CommentModule } from './comment/comment.module';
       driver: ApolloDriver,
       playground: true,
       graphiql: true,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql')
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      subscriptions: {
+        'graphql-ws': true
+      }
     }),
     JwtModule.register({
       global: true,
@@ -32,9 +36,8 @@ import { CommentModule } from './comment/comment.module';
     ChannelModule,
     VideoModule,
     SupabaseModule,
-    CommentModule
-  ],
-  controllers: [],
-  providers: []
+    CommentModule,
+    PubsubModule
+  ]
 })
 export class AppModule {}
