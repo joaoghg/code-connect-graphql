@@ -68,6 +68,6 @@ export class CommentResolver {
     }
   })
   commentCreated(@Args('videoId') videoId: string) {
-    return this.pubSub.asyncIterableIterator(`commentCreated:${videoId}`);
+    return this.pubSub.asyncIterableIterator('commentCreated');
   }
 }
