@@ -41,6 +41,13 @@ type CreateUploadUrl {
   url: String!
 }
 
+type Comment {
+  id: String!
+  content: String!
+  userId: String!
+  videoId: String!
+}
+
 type Query {
   users: [User!]!
   channels: [Channel!]!
@@ -57,6 +64,7 @@ type Mutation {
   removeChannel(id: String!): Channel!
   createVideo(createVideoInput: CreateVideoInput!): CreateUploadUrl!
   updateVideo(updateVideoInput: UpdateVideoInput!): Video!
+  createComment(createCommentInput: CreateCommentInput!): Comment!
 }
 
 input CreateUserDto {
@@ -95,4 +103,9 @@ input UpdateVideoInput {
   filename: String
   videoId: String!
   status: String!
+}
+
+input CreateCommentInput {
+  content: String!
+  videoId: String!
 }

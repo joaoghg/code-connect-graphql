@@ -10,6 +10,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ChannelModule } from './channel/channel.module';
 import { VideoModule } from './video/video.module';
 import { SupabaseModule } from './supabase/supabase.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -30,7 +31,8 @@ import { SupabaseModule } from './supabase/supabase.module';
     AuthModule,
     ChannelModule,
     VideoModule,
-    SupabaseModule
+    SupabaseModule,
+    CommentModule
   ],
   controllers: [],
   providers: []

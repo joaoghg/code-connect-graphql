@@ -17,6 +17,7 @@ model User {
   updatedAt DateTime @default(now()) @updatedAt
 
   channels Channel[]
+  comments Comment[]
 }
 
 model Channel {
@@ -46,5 +47,18 @@ model Video {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @default(now()) @updatedAt
 
-  channel Channel @relation(fields: [channelId], references: [id])
+  channel  Channel   @relation(fields: [channelId], references: [id])
+  comments Comment[]
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  userId    String
+  videoId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  user  User  @relation(fields: [userId], references: [id])
+  video Video @relation(fields: [videoId], references: [id])
 }
