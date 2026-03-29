@@ -31,15 +31,22 @@ type Video {
   description: String!
   slug: String!
   channelId: String!
-  createdAt: String!
-  updatedAt: String!
+  status: String!
+  channel: Channel
+  publicUrl: String!
+}
+
+type CreateUploadUrl {
+  videoId: String!
+  url: String!
 }
 
 type Query {
   users: [User!]!
   channels: [Channel!]!
   channel(id: String!): Channel!
-  video(id: Int!): Video!
+  videos(channelId: String!): [Video!]!
+  video(id: String!): Video!
 }
 
 type Mutation {
@@ -48,9 +55,8 @@ type Mutation {
   createChannel(createChannelInput: CreateChannelInput!): Channel!
   updateChannel(updateChannelInput: UpdateChannelInput!): Channel!
   removeChannel(id: String!): Channel!
-  createVideo(createVideoInput: CreateVideoInput!): Video!
+  createVideo(createVideoInput: CreateVideoInput!): CreateUploadUrl!
   updateVideo(updateVideoInput: UpdateVideoInput!): Video!
-  removeVideo(id: Int!): Video!
 }
 
 input CreateUserDto {
@@ -78,14 +84,15 @@ input UpdateChannelInput {
 input CreateVideoInput {
   name: String!
   description: String!
-  slug: String!
   channelId: String!
+  filename: String!
 }
 
 input UpdateVideoInput {
   name: String
   description: String
-  slug: String
   channelId: String
-  id: Int!
+  filename: String
+  videoId: String!
+  status: String!
 }

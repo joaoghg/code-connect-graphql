@@ -7,7 +7,7 @@ export class CreateVideoInput {
   @Field(() => String)
   description: string;
   @Field(() => String)
-  slug: string;
-  @Field(() => String)
   channelId: string;
+  @Field(() => String)
+  filename: string;
 }

@@ -2,35 +2,70 @@ import { Injectable } from '@nestjs/common';
 import { CreateVideoInput } from './dto/create-video.input';
 import { UpdateVideoInput } from './dto/update-video.input';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { SupabaseService } from 'src/supabase/supabase.service';
+import { randomUUID } from 'crypto';
+import { VideoStatus } from 'src/generated/prisma/enums';
 
 @Injectable()
 export class VideoService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private supabaseService: SupabaseService
+  ) {}
 
   async create(createVideoInput: CreateVideoInput) {
-    return this.prismaService.video.create({
+    const slug = `${createVideoInput.channelId}/${randomUUID()}/${createVideoInput.filename}`;
+
+    const video = await this.prismaService.video.create({
       data: {
         description: createVideoInput.description,
         name: createVideoInput.name,
-        slug: createVideoInput.slug,
+        slug: slug,
         channelId: createVideoInput.channelId
+      }
+    });
+
+    const signedUrl = await this.supabaseService.createSignedUploadUrl(slug);
+
+    return { videoId: video.id, url: signedUrl.signedUrl };
+  }
+
+  async update(videoId: string, status: VideoStatus) {
+    return await this.prismaService.video.update({
+      where: {
+        id: videoId
+      },
+      data: {
+        status: status
       }
     });
   }
 
-  findAll() {
-    return `This action returns all video`;
+  async findAll(channelId: string) {
+    return await this.prismaService.video.findMany({
+      where: {
+        channelId: channelId
+      }
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} video`;
+  async findOne(id: string) {
+    return await this.prismaService.video.findUnique({
+      where: {
+        id: id
+      }
+    });
   }
 
-  update(id: number, updateVideoInput: UpdateVideoInput) {
-    return `This action updates a #${id} video`;
+  async findChannelFrom(channelId: string) {
+    return await this.prismaService.channel.findUnique({
+      where: {
+        id: channelId
+      }
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} video`;
+  getVideoPublicUrl(slug: string) {
+    return this.supabaseService.createPublicUrl(slug);
   }
 }

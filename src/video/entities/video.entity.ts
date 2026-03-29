@@ -1,4 +1,6 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ObjectType, Field } from '@nestjs/graphql';
+import { Channel } from 'src/channel/entities/channel.entity';
+import { VideoStatus } from 'src/generated/prisma/enums';
 
 @ObjectType()
 export class Video {
@@ -13,7 +15,9 @@ export class Video {
   @Field(() => String)
   channelId: string;
   @Field(() => String)
-  createdAt: string;
+  status: VideoStatus;
+  @Field(() => Channel, { nullable: true })
+  channel: Channel;
   @Field(() => String)
-  updatedAt: string;
+  publicUrl: string;
 }
